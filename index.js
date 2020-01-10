@@ -43,7 +43,7 @@ async function getAllPRs(teamName) {
     const pullRequests = await getPRs(slugs, bitbucket)
     const reviewers = await getReviewers(pullRequests)
 
-    //console.log() // need to parse slug 
+    console.log(reviewers) // TODO - format reviewers as slack message
   } catch(err){
     console.log(err)
   } 
@@ -65,12 +65,15 @@ async function getReviewers(pullrequest) {
       const waitingReview = participants.filter( reviewer => !reviewer.approved) 
       const reviewerName = waitingReview.map( review => review.user.display_name)
 
-      console.log(data)
+      reviewers.push({
+        title,
+        updated_on,
+        reviewerName
+      })
     }
   }
   // loop thru slug and ids and grab revewer
-
-
+  return reviewers
 }
 
 async function getPRs(slugs, bitbucket) {
