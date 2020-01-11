@@ -10,7 +10,9 @@
   "author": "Yitaek Hwang",
   "license": "MIT",
   "dependencies": {
+    "@slack/webhook": "^5.0.2",
     "bitbucket": "^1.17.1",
+    "date-fns": "^2.9.0",
     "dotenv": "^8.2.0"
   }
 }
