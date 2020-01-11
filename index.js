@@ -1,4 +1,8 @@
 const Bitbucket = require('bitbucket')
+const { IncomingWebhook } = require('@slack/webhook')
+const parseISO = require('date-fns/parseISO')
+const differenceInDays = require('date-fns/differenceInDays')
+
 require('dotenv').config()
 
 const bitbucket = new Bitbucket()
@@ -8,6 +12,7 @@ bitbucket.authenticate({
   username: process.env.USERNAME,
   password: process.env.PASSWORD
 })
+
 
 // TODO
 /*
@@ -30,8 +35,8 @@ async function getAllPRs(teamName) {
   try {
     const { data } = await bitbucket.repositories.list({ 
       username: teamName,
-      pagelen: 10,
-      q: '(project.key="LP" OR project.key="JUMP" OR project.key="MAR" OR project.key="SM" OR project.key="VEIC")'
+      pagelen: 100,
+      q: '(project.key="LP" OR project.key="JUMP" OR project.key="MAR" OR project.key="VEIC")'
     })
 
     // TODO - ITERATE IF NEXT TOKEN EXISTS
@@ -43,10 +48,41 @@ async function getAllPRs(teamName) {
     const pullRequests = await getPRs(slugs, bitbucket)
     const reviewers = await getReviewers(pullRequests)
 
-    console.log(reviewers) // TODO - format reviewers as slack message
+    await sendToSlack(reviewers)
+    
   } catch(err){
     console.log(err)
   } 
+}
+
+async function sendToSlack(message){
+
+  const DATE_TODAY = Date.now()
+
+  const blocks = message.map( pr => {
+    const reviewers = pr.reviewerName.join(', ')
+    const prTime = parseISO(pr.updated_on)
+    const timeDiff = differenceInDays(DATE_TODAY, prTime)
+    const link = pr.link
+    const slackMsg = {
+      "type": "section",
+      "text": {
+        "type": "mrkdwn",
+        "text": `<${link}|${pr.title}> - ${timeDiff} days old - Waiting on ${reviewers}`
+      }
+    }
+
+    return slackMsg
+  })
+
+  const url = process.env.SLACK_WEBHOOK_URL
+  const webhook = new IncomingWebhook(url)
+
+  await webhook.send({
+    text: "Pull request reminders", 
+    blocks
+  })
+
 }
 
 async function getReviewers(pullrequest) {
@@ -61,14 +97,16 @@ async function getReviewers(pullrequest) {
         pull_request_id: ids[j]
       })
 
-      const { title, participants, updated_on } = data
+      const { title, participants, updated_on, links } = data
       const waitingReview = participants.filter( reviewer => !reviewer.approved) 
       const reviewerName = waitingReview.map( review => review.user.display_name)
+      const link = links.html.href
 
       reviewers.push({
         title,
         updated_on,
-        reviewerName
+        reviewerName,
+        link
       })
     }
   }
