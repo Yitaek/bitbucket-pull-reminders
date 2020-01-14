@@ -2,17 +2,11 @@ const Bitbucket = require('bitbucket')
 const { IncomingWebhook } = require('@slack/webhook')
 const parseISO = require('date-fns/parseISO')
 const differenceInDays = require('date-fns/differenceInDays')
-
-require('dotenv').config()
+const config = require('./Config')
 
 const bitbucket = new Bitbucket()
 
-bitbucket.authenticate({
-  type: 'basic',
-  username: process.env.USERNAME,
-  password: process.env.PASSWORD
-})
-
+bitbucket.authenticate(config.bitbucket)
 
 // TODO
 /*
@@ -24,35 +18,46 @@ bitbucket.authenticate({
 6. send slack bot message
 7. package as lambda --> https://medium.com/better-programming/cron-job-patterns-in-aws-126fbf54a276
 
-[pinpoint-us-server#5] MAN-23: Configure Nodemon to listen changes in node_modules/@cox2m/ libs (josevillarreal-cox2m)
-21 days stale · 28 days old · Waiting on oscar-soto-cox2m
-
 */ 
-const teamName = 'leverege'
+const teamName = process.env.TEAMNAME
 getAllPRs(teamName)
 
 async function getAllPRs(teamName) {
   try {
-    const { data } = await bitbucket.repositories.list({ 
-      username: teamName,
-      pagelen: 100,
-      q: '(project.key="LP" OR project.key="JUMP" OR project.key="MAR" OR project.key="VEIC")'
-    })
-
-    // TODO - ITERATE IF NEXT TOKEN EXISTS
-    const { values } = data
-    const slugs = values.map( repo => {
-      return repo.slug
-    })
+    const slugs = await getAllRepos(1)
 
     const pullRequests = await getPRs(slugs, bitbucket)
     const reviewers = await getReviewers(pullRequests)
+
+    //console.log(reviewers)
 
     await sendToSlack(reviewers)
     
   } catch(err){
     console.log(err)
   } 
+}
+
+async function getAllRepos(pageNumber){
+  const { data } = await bitbucket.repositories.list({ 
+    username: teamName,
+    pagelen: 100,
+    page: pageNumber,
+    q: '(project.key="LP" OR project.key="JUMP" OR project.key="MAR" OR project.key="VEIC")' // TODO - make this configurable
+  })
+
+  const { values, size, page, next } = data
+  let slugs = []
+  
+  if(next){
+    slugs = await getAllRepos(page + 1)
+  }
+
+  const repoSlugs = values.map( repo => {
+    return repo.slug
+  })
+
+  return slugs.concat(repoSlugs)
 }
 
 async function sendToSlack(message){
