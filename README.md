@@ -29,9 +29,24 @@ USERNAME=<bitbucket username>
 SLACK_WEBHOOK_URL=<slack webhook url>
 ```
 
+## Deployment
+
+Currently, a full, automated setup is supported on GCP via Cloud Scheduler and Cloud Functions, but a similar architecture is possible via AWS CloudWatch and Lambda. 
+
+### GCP
+
+Requirements
+- Cloud Scheduler
+- Cloud Functions
+- Cloud Pub/Sub
+- gcloud 
+
+Initialize gcloud and run deployGCP script. This will create a Cloud Function named `bitbucket-pr-bot` listening to PubSub topic `bb-pr-bot` that is triggered at 9am ET on weekdays  via Cloud Scheduler job `bitbucket-pr-bot-daily`. 
+
 ## Roadmap
 
 - Include AWS and GCP deployment artifacts (e.g. serverless.io, terraform) 
+- Secret management
 - Refactor code and make it more dynamic
 - Other components from Pull Panda (e.g. UI, analytics board, etc) 
 
