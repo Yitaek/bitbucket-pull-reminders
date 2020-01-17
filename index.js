@@ -5,22 +5,13 @@ const differenceInDays = require('date-fns/differenceInDays')
 const config = require('./Config')
 
 const bitbucket = new Bitbucket()
+const teamName = process.env.TEAMNAME
 
 bitbucket.authenticate(config.bitbucket)
 
-// TODO
-/*
-1. get list of all projects/repos
-2. list all PRs via list pull request
-3. grab the ids and getPullRequest
-4. get a match for reviewers 
-5. build out a list
-6. send slack bot message
-7. package as lambda --> https://medium.com/better-programming/cron-job-patterns-in-aws-126fbf54a276
-
-*/ 
-const teamName = process.env.TEAMNAME
-getAllPRs(teamName)
+exports.sendPullRequestReminders = async (event, context) => {
+  await getAllPRs(teamName)
+};
 
 async function getAllPRs(teamName) {
   try {
@@ -28,8 +19,6 @@ async function getAllPRs(teamName) {
 
     const pullRequests = await getPRs(slugs, bitbucket)
     const reviewers = await getReviewers(pullRequests)
-
-    //console.log(reviewers)
 
     await sendToSlack(reviewers)
     
@@ -43,7 +32,7 @@ async function getAllRepos(pageNumber){
     username: teamName,
     pagelen: 100,
     page: pageNumber,
-    q: '(project.key="LP" OR project.key="JUMP" OR project.key="MAR" OR project.key="VEIC")' // TODO - make this configurable
+    q: '(project.key="LP" OR project.key="JUMP" OR project.key="MAR" OR project.key="VEIC" OR project.key="SM")' // TODO - make this configurable ... 
   })
 
   const { values, size, page, next } = data

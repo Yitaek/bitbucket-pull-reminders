@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Set GCP defaults
+gcloud config set project leverege-dev-yitaek
+
+# Create PubSub topic
+
+# Deploy cloud functions
+gcloud functions deploy bitbucket-pr-bot \
+  --region us-east4 \
+  --runtime nodejs10 \
+  --trigger-topic bb-pr-bot \
+  --entry-point sendPullRequestReminders 
+
+# Set up Cloud Scheduler
+gcloud beta scheduler jobs create pubsub bitbucket-pr-bot-daily \
+  --schedule "0 9 * * 1-5" \
+  --topic bb-pr-bot \
+  --message-body "{}" \
+  --time-zone "America/New_York"

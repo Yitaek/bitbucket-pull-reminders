@@ -1,0 +1,9 @@
+.gcloudignore
+.git
+.gitignore
+node_modules
+README.md
+LICENSE.md
+.DS_Store
+deployGCP
+package-lock.json
