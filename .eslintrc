@@ -1,0 +1,14 @@
+{
+  "extends": "google",
+  "rules": {
+    "semi": 0,
+    "comma-dangle": 0,
+    "require-jsdoc": 0
+  },
+  "parserOptions": {
+    "ecmaVersion": 2017
+  },
+  "env": {
+    "es6": true
+  }
+}

@@ -17,5 +17,9 @@
     "bitbucket": "^1.17.1",
     "date-fns": "^2.9.0",
     "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
