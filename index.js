@@ -1,4 +1,4 @@
-const config = require('./Config')
+const Config = require('./Config')
 const Bitbucket = require('./Bitbucket')
 const Slack = require('./Slack')
 
@@ -6,9 +6,12 @@ const Slack = require('./Slack')
 //   await getAllPRs()
 // };
 
+
 getAllPRs()
 
 async function getAllPRs() {
+  const config = await Config.create()
+  
   const bitbucket = new Bitbucket( config.bitbucket )
   const slack = new Slack( config.slack )
 
