@@ -28,7 +28,7 @@ class Bitbucket {
       q: '(project.key="LP" OR project.key="JUMP")' // OR project.key="JUMP" OR project.key="MAR" OR project.key="VEIC" OR project.key="SM")'  TODO - make this configurable ...
     })
 
-    const {values, size, page, next} = data
+    const {values, page, next} = data
     let slugs = []
 
     if (next) {

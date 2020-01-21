@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "encrypt": "./deployment/encrypt.sh encrypt",
-    "decrypt": "./deployment/encrypt.sh decrypt"
+    "decrypt": "./deployment/encrypt.sh decrypt",
+    "lint": "eslint . "
   },
   "keywords": [],
   "author": "Yitaek Hwang",
