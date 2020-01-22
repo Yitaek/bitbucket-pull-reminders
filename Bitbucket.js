@@ -5,6 +5,12 @@ class Bitbucket {
     this.bitbucket = new BitbucketAPI()
     this.bitbucket.authenticate(options.auth)
     this.teamName = options.teamName
+
+    const projectsArr = options.projects.split(',')
+    const projectStrings = projectsArr.map( project => {
+      return `project.key="${project}"`
+    })
+    this.projects = `(${projectStrings.join(' OR ')})`
   }
 
   async getAllPRs() {
@@ -25,7 +31,7 @@ class Bitbucket {
       username: this.teamName,
       pagelen: 100,
       page: pageNumber,
-      q: '(project.key="LP" OR project.key="JUMP")' // OR project.key="JUMP" OR project.key="MAR" OR project.key="VEIC" OR project.key="SM")'  TODO - make this configurable ...
+      q: this.projects
     })
 
     const {values, page, next} = data
