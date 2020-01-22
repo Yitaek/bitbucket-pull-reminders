@@ -45,7 +45,8 @@ async function create() {
         username: process.env.USERNAME || envConfig.USERNAME,
         password: process.env.PASSWORD || envConfig.PASSWORD,
       },
-      teamName: process.env.TEAMNAME || envConfig.TEAMNAME
+      teamName: process.env.TEAMNAME || envConfig.TEAMNAME,
+      projects: process.env.BB_PROJECTS || envConfig.BB_PROJECTS
     },
     slack: {
       webhook: process.env.SLACK_WEBHOOK_URL || envConfig.SLACK_WEBHOOK_URL
