@@ -4,15 +4,23 @@
   "description": "Bitbucket equivalent of Github's Pull Panda",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "encrypt": "./deployment/encrypt.sh encrypt",
+    "decrypt": "./deployment/encrypt.sh decrypt",
+    "lint": "eslint . "
   },
   "keywords": [],
   "author": "Yitaek Hwang",
   "license": "MIT",
   "dependencies": {
+    "@google-cloud/kms": "^1.6.2",
     "@slack/webhook": "^5.0.2",
     "bitbucket": "^1.17.1",
     "date-fns": "^2.9.0",
     "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
   }
 }

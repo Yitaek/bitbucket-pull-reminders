@@ -4,6 +4,7 @@
 gcloud config set project leverege-dev-yitaek
 
 # Create PubSub topic
+gcloud pubsub topics create bb-pr-bot
 
 # Deploy cloud functions
 gcloud functions deploy bitbucket-pr-bot \
