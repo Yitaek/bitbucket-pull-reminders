@@ -39,14 +39,16 @@ Requirements
 - Cloud Scheduler
 - Cloud Functions
 - Cloud Pub/Sub
+- Cloud KMS (optional) 
 - gcloud 
 
 Initialize gcloud and run deployGCP script. This will create a Cloud Function named `bitbucket-pr-bot` listening to PubSub topic `bb-pr-bot` that is triggered at 9am ET on weekdays  via Cloud Scheduler job `bitbucket-pr-bot-daily`. 
 
+You can optionally encrypt your env variables using KMS. Use the `encrypt` and `decrypt` npm scripts to create .env.enc files. When you run it locally, it will use .env, but on Cloud Functions, it will use encrypted secrets. 
+
 ## Roadmap
 
 - Include AWS and GCP deployment artifacts (e.g. serverless.io, terraform) 
-- Secret management
 - Refactor code and make it more dynamic
 - Other components from Pull Panda (e.g. UI, analytics board, etc) 
 
