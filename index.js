@@ -11,7 +11,7 @@ getAllPRs()
 
 async function getAllPRs() {
   const config = await Config.create()
-  
+
   const bitbucket = new Bitbucket( config.bitbucket )
   const slack = new Slack( config.slack )
 

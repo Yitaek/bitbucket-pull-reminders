@@ -7,7 +7,7 @@ class Bitbucket {
     this.teamName = options.teamName
 
     const projectsArr = options.projects.split(',')
-    const projectStrings = projectsArr.map( project => {
+    const projectStrings = projectsArr.map( (project) => {
       return `project.key="${project}"`
     })
     this.projects = `(${projectStrings.join(' OR ')})`
@@ -84,7 +84,7 @@ class Bitbucket {
           pull_request_id: ids[j]
         })
 
-        const {title, participants, updated_on, links} = data
+        const {title, participants, updated_on, links} = data //eslint-disable-line
         const waitingReview = participants.filter( (reviewer) => !reviewer.approved)
         const reviewerName = waitingReview.map( (review) => review.user.display_name)
         const link = links.html.href
