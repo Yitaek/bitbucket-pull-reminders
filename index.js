@@ -2,12 +2,9 @@ const Config = require('./Config')
 const Bitbucket = require('./Bitbucket')
 const Slack = require('./Slack')
 
-// exports.sendPullRequestReminders = async (event, context) => {
-//   await getAllPRs()
-// };
-
-
-getAllPRs()
+exports.sendPullRequestReminders = async (event, context) => {
+  await getAllPRs()
+};
 
 async function getAllPRs() {
   const config = await Config.create()
