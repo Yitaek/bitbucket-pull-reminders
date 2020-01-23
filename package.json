@@ -1,13 +1,14 @@
 {
   "name": "bitbucket-pull-reminders",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Bitbucket equivalent of Github's Pull Panda",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "encrypt": "./deployment/encrypt.sh encrypt",
-    "decrypt": "./deployment/encrypt.sh decrypt",
-    "lint": "eslint . --fix"
+    "encrypt": "./setup/encrypt.sh encrypt",
+    "decrypt": "./setup/encrypt.sh decrypt",
+    "lint": "eslint . --fix",
+    "deploy:gcf": "./deployGCF.sh"
   },
   "keywords": [],
   "author": "Yitaek Hwang",

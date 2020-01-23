@@ -5,5 +5,7 @@ node_modules
 README.md
 LICENSE.md
 .DS_Store
-deployGCP
+deployment
 package-lock.json
+.env
+.eslintrc
