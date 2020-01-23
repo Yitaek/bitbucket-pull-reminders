@@ -26,8 +26,12 @@ npm install
 ```sh
 PASSWORD=<bitbucket password>
 USERNAME=<bitbucket username>
+TEAMNAME=<bitbucket teamname>
+BB_PROJECTS=<AB,CD,EF> # comma separated list of project names
 SLACK_WEBHOOK_URL=<slack webhook url>
 ```
+
+When the script is running locally, it will use unencrpyted variables from .env. In production, KMS will be used to encrpyt secrets prior to deploying to Cloud Functions so other can't see your bitbucket password or slack webhook in unencrpyted form. 
 
 ## Deployment
 
@@ -42,14 +46,30 @@ Requirements
 - Cloud KMS (optional) 
 - gcloud 
 
-Initialize gcloud and run deployGCP script. This will create a Cloud Function named `bitbucket-pr-bot` listening to PubSub topic `bb-pr-bot` that is triggered at 9am ET on weekdays  via Cloud Scheduler job `bitbucket-pr-bot-daily`. 
+Replace the GCP variables under `setup/setGCPvars.sh` 
 
-You can optionally encrypt your env variables using KMS. Use the `encrypt` and `decrypt` npm scripts to create .env.enc files. When you run it locally, it will use .env, but on Cloud Functions, it will use encrypted secrets. 
+```sh
+export GCP_PROJECT=<YOUR-GCP-PROJECT-NAME>
+
+## Feel free to use these defaults
+export GCP_REGION=us-east4
+export KMS_KEY_RING=bb-pr-bot
+export KMS_KEY=bb-pr-bot-key
+export PUBSUB_TOPIC=bb-pr-bot
+```
+
+Run `npm setup:gcp` to create Pub/Sub, KMS key ring, IAM bindings, and Cloud Scheduler. 
+
+By default, this will create a Cloud Function named `bitbucket-pr-bot` listening to PubSub topic `bb-pr-bot` that is triggered at 9am ET on weekdays via Cloud Scheduler job `bitbucket-pr-bot-daily`. 
+
+Run `npm encrypt` to create an encrypted version (.env.enc) of your configs. 
+
+Finally, run `npm deploy:gcf` to package and deploy the Cloud Function.
 
 ## Roadmap
 
-- Include AWS and GCP deployment artifacts (e.g. serverless.io, terraform) 
-- Refactor code and make it more dynamic
+- Include AWS equivalent deployment using Lambda and Cloudwatch
+- Make Slack messages more useful (e.g. unmerged branches with all approvals, tag users)
 - Other components from Pull Panda (e.g. UI, analytics board, etc) 
 
 ## License
