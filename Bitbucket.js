@@ -58,13 +58,16 @@ class Bitbucket {
 
       if (data.size > 0) {
         const slug = slugs[i]
+
         const ids = data.values.map((pr) => {
           return pr.id
         })
+
         const idsBySlug = {
           slug,
           ids
         }
+
         pullRequests.push(idsBySlug)
       }
     }
@@ -77,28 +80,35 @@ class Bitbucket {
     for (let i=0; i < pullrequest.length; i++) {
       const ids = pullrequest[i].ids
       const slug = pullrequest[i].slug
-      for (let j=0; j <ids.length; j++) {
+
+      for (let j=0; j < ids.length; j++) {
         const {data} = await this.bitbucket.repositories.getPullRequest({
           username: this.teamName,
           repo_slug: slug,
           pull_request_id: ids[j]
         })
 
-        const {title, participants, updated_on, links} = data //eslint-disable-line
-        const waitingReview = participants.filter( (reviewer) => !reviewer.approved)
-        const reviewerName = waitingReview.map( (review) => review.user.display_name)
-        const link = links.html.href
-
-        reviewers.push({
-          title,
-          updated_on,
-          reviewerName,
-          link
-        })
+        reviewers.push(this.mapPR(data));
       }
     }
-    // loop thru slug and ids and grab revewer
+    // loop thru slug and ids and grab reviewer
     return reviewers
+  }
+
+  mapPR(pr) {
+    // eslint-disable-next-line max-len
+    const waitingReview = pr.participants.filter( (reviewer) => !reviewer.approved)
+    // eslint-disable-next-line max-len
+    const waitingReviewNames = waitingReview.map( (review) => review.user.display_name)
+
+    return {
+      title: pr.title,
+      author: pr.author.display_name,
+      updatedOn: pr.updated_on,
+      createdOn: pr.created_on,
+      link: pr.links.html.href,
+      waitingReviewNames: waitingReviewNames
+    }
   }
 }
 
