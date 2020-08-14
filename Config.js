@@ -32,7 +32,7 @@ async function decrypt(
 async function create() {
   require('dotenv').config()
 
-  let envConfig
+  let envConfig = require('dotenv').config()
 
   if (process.env.K_SERVICE) {
     envConfig = await decrypt()
@@ -49,7 +49,17 @@ async function create() {
       projects: process.env.BB_PROJECTS || envConfig.BB_PROJECTS
     },
     slack: {
-      webhook: process.env.SLACK_WEBHOOK_URL || envConfig.SLACK_WEBHOOK_URL
+      webhook: {
+        url: process.env.SLACK_WEBHOOK_URL || envConfig.SLACK_WEBHOOK_URL,
+        defaults: {
+          username: process.env.SLACK_BOT_NAME || envConfig.SLACK_BOT_NAME,
+          icon_emoji: process.env.SLACK_BOT_EMOJI || envConfig.SLACK_BOT_EMOJI
+        }
+      }
+    },
+    parser: {
+      type: process.env.SLACK_MESSAGE_PARSER || envConfig.SLACK_MESSAGE_PARSER,
+      options: JSON.parse(process.env.SLACK_MESSAGE_PARSER_OPTIONS || envConfig.SLACK_MESSAGE_PARSER_OPTIONS || '{}')
     }
   }
   return config
