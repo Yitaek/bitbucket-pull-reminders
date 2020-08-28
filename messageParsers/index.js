@@ -1,11 +1,11 @@
-const RobinMessageParser = require('./robinMessageParser');
+const ExampleMessageParser = require('./exampleMessageParser');
 const DefaultMessageParser = require('./defaultMessageParser');
 
 class MessageParserFactory {
   constructor(options) {
     this.parsers = [
       DefaultMessageParser,
-      RobinMessageParser
+      ExampleMessageParser
     ];
   }
 
