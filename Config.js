@@ -30,8 +30,6 @@ async function decrypt(
 }
 
 async function create() {
-  require('dotenv').config()
-
   let envConfig = require('dotenv').config()
 
   if (process.env.K_SERVICE) {
