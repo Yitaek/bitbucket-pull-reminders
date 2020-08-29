@@ -1,6 +1,6 @@
 {
   "name": "bitbucket-pull-reminders",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "Bitbucket equivalent of Github's Pull Panda",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,9 @@
   },
   "keywords": [],
   "author": "Yitaek Hwang",
-  "contributors": ["Robin Staelens"],
+  "contributors": [
+    "Robin Staelens"
+  ],
   "license": "MIT",
   "dependencies": {
     "@google-cloud/kms": "^1.6.2",
