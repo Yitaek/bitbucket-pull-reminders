@@ -66,6 +66,30 @@ Run `npm encrypt` to create an encrypted version (.env.enc) of your configs.
 
 Finally, run `npm deploy:gcf` to package and deploy the Cloud Function.
 
+## Custom Parsers
+In bitbucket-pull-reminders you can implement custom messages parsers.
+This allows you to present the PRs retrieved from BitBucket in any format you like in Slack.
+We provided 2 parsers by default for you. 
+The `defaultMessageParser.js` is a pretty basic parser while the `exampleMessageParser.js` presents the PRs in a more advanced format (like divide open en approved PRs,...).
+
+### Implementing a custom parser
+In order to implement a custom parser you need to take 3 basic steps.
+
+1. Add a js file in the messageParsers folder that exports a class with a static function `type()`.
+It is very important that you return a name of your parser here. If you don't do this correctly you will not be able to select your parser.
+
+The code will call the parsePrs function in order to convert the PRs to a Slack message.
+
+2. Add the parser to `messageParsers/index.js`.
+Simply import the class and add it to the parsers array.
+
+3. Select the parser using the `SLACK_MESSAGE_PARSER` environment variable.
+Set the `SLACK_MESSAGE_PARSER` variable to whatever you called your parser in the static `type()` function of your new parser.
+
+You can base your parsers. On one of the existing ones.
+From this point on your imagination is the limit. Get creative, get crazy, get coding :).
+If you have any questions feel free to reach out!
+
 ## Roadmap
 
 - Include AWS equivalent deployment using Lambda and Cloudwatch
