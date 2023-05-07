@@ -20,7 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "@google-cloud/kms": "^1.6.2",
-    "@slack/webhook": "^5.0.2",
+    "@slack/webhook": "^5.0.4",
     "bitbucket": "^1.17.1",
     "date-fns": "^2.9.0",
     "dotenv": "^8.2.0"
